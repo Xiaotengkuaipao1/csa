@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+		<style>
+      	li {
+        	color:pink;
+        }
+		</style>
+</head>
+<body>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li>10</li>
+    </ul>
+
+    <script>
+        let _ul = document.querySelector('ul');
+        _ul.addEventListener('click',print,false);
+        function print(e){
+            let x = e.target;
+            console.log(x.innerHTML);
+        }
+
+        let arr_li = _ul.children;
+        let color_arr = ["red", "green"];
+        for(let i=0;i<arr_li.length;i++){
+            t = (i+1)%2==0?1:0;
+            arr_li[i].style.color = color_arr[t];
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="height: 500px; background-color: red; text-align: center; font-size: 14px; line-height: 500px;">我是菜狗</div>
+    <button class="theme">主题切换按钮</button>
+    <button class="font">字体大小切换按钮</button>
+    <script>
+        let _div = document.querySelector('div');
+        let theme = document.querySelector(".theme");
+        let i = 0; let j = 0;
+        let font = document.querySelector(".font");
+        
+        theme.addEventListener('click',function(){
+            var t = ['red','pink'];
+            i = i+1==2?0:1;
+            _div.style.backgroundColor = t[i];
+        })
+
+        font.addEventListener('click',function(){
+            var  t = ['14px','50px','60px','100px'];
+            j = j+1==4?0:j+1;
+            _div.style.fontSize=t[j];
+        })
+    </script>
+</body>
+</html>

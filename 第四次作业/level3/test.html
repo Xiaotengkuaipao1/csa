@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        textarea{
+            height: 200px;
+            width: 400px;
+        }   
+
+        ul li {
+            width: 100px;
+        }
+
+        ul li a {
+            float: right;
+        }   
+    </style>
+</head>
+<body>
+    <textarea name="" id="" >123</textarea>
+    <button>发布</button>
+    <ul></ul>
+    <script>
+        let text = document.querySelector("textarea");
+        let btn = document.querySelector("button");
+        let _ul = document.querySelector("ul");
+        btn.addEventListener("click",function(){
+            let newNode = document.createElement("li");
+            newNode.innerHTML = text.value+"<a href='javascript:;'>删除</a>";
+            _ul.insertBefore(newNode,_ul.children[0]);
+
+            let ul_child = document.querySelectorAll('a');
+                for(let i=0;i<ul_child.length;i++){
+                    ul_child[i].addEventListener("click",function(){
+                        _ul.removeChild(this.parentNode);
+                    });
+                }
+            
+        });
+    </script>
+</body>
+</html>
