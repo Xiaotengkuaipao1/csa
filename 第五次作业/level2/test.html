@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        li {
+            display: inline-block;
+            list-style: none;
+            width: 150px;
+            height: 200px;
+            padding-left: 10px;
+        }
+
+        li img {
+            width: 150px;
+            height: 150px;
+        }
+
+        li p {
+            overflow: hidden;
+            font-size: 14px;
+            height: 50px;
+        }
+    </style>
+    <script src="../jquery_min.js"></script>
+</head>
+
+<body>
+    <div>
+        <ul>
+
+        </ul>
+    </div>
+    <script>
+        function Ajax(){
+            this.post=function(url,options){
+                options.headers={
+                        "Content-Type":"application/x-www-form-urlencoded"
+                    }
+                console.log(options);
+                 var xhr=new XMLHttpRequest();
+                 xhr.open("post",url);
+                 xhr.setRequestHeader("Content-Type",options.headers["Content-Type"]);
+                 var params=options.data;
+                 xhr.send(params);
+                 xhr.onload=function(){
+                     if(xhr.status>=200&&xhr.status<400)
+                     {
+                         options.success(xhr.response);
+                     }else{
+                         options.error(xhr.response);
+                     }
+                 }
+            }
+            this.get=function(url,options){
+               var xhr=new XMLHttpRequest();
+               var params="";
+               for(var a in options.data)
+               {
+                   params+=a+"="+options.data[a]+"&";
+               }
+               params=params.substr(0,params.length-1);
+                xhr.open("get",url+"?"+params);
+                xhr.send();
+                xhr.onload=function(){
+                    if(xhr.status>=200&&xhr.status<400)
+                     {
+                         options.success(xhr.response);
+                     }else{
+                         options.error(xhr.response);
+                     }
+                }
+            }
+        }
+
+        let ul = document.querySelector("ul");
+        let ajax = new Ajax();
+        ajax.get("http://cloud-music.pl-fe.cn/personalized",{
+            data:{
+                limit:30
+            },
+            success:function(data){
+                data = JSON.parse(data).result;
+                console.log(data);
+                for(let i =0;i<data.length;i++){
+                    let li = document.createElement('li');
+                    li.innerHTML = `<img src = "${data[i].picUrl}"><p>${data[i].name}</p>`;
+                    ul.append(li);
+                }
+            }
+            // success:function(data){
+            //      console.log(JSON.parse(data).result);
+            //  }
+        })
+    </script>
+</body>
+
+</html>

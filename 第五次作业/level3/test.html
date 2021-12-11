@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+
+        li{
+            display: inline-block;
+            list-style: none;
+            width: 150px;
+            height: 200px;
+            padding-left: 10px;
+        }
+
+        li img{
+            width: 150px;
+            height: 150px;
+        }
+
+        li p{
+            overflow: hidden;
+            font-size: 14px;
+            height: 50px;
+        }
+
+    </style>
+    <script src="../jquery_min.js"></script>
+</head>
+<body>
+    <div>
+        <ul></ul>
+    </div>
+    <script>
+        let ul = document.querySelector('ul');
+        function ajax(optionsInput){
+            options={
+                type:"get",
+                url:"",
+                header:{
+                'contentType':"application/x-www-form-urlencoded"}
+            }
+            // 使参数二的值覆盖参数一的属性
+            Object.assign(options,optionsInput);
+            var xhr=new XMLHttpRequest();
+            var params="";
+            for(var attr in options.data)
+            {
+                // 将参数转化为字符串
+                params+=attr+"="+options.data[attr]+"&";
+            }
+            params=params.substr(0,params.length-1);
+            // 配置ajax对象
+            if(options.type==="get")
+            {
+                options.url=options.url+"?"+params;
+            }
+            xhr.open(options.type,options.url);
+            var ct=options.header['contentType'];
+                xhr.setRequestHeader("Content-Type",ct);
+            if(options.type=="post")
+            {
+                if(ct==="application/json")
+                {
+                    // options.data就是 JSON字符串
+                    xhr.send(JSON.stringify(options.data));
+                }else{
+                    xhr.send(params);
+                }
+            }else{
+                xhr.send();
+            }
+            xhr.onload=function(){
+                // console.log(xhr.response); 
+                // 获取响应头中的数据
+                // console.log(xhr.getResponseHeader('Content-Type'));
+                var contt=xhr.getResponseHeader('Content-Type');
+                var responsetext=xhr.response;
+                // console.log(responsetext);
+                if(contt.includes('application/json')){
+                    // 把json字符串转化为json对象
+                    responsetext=JSON.parse(xhr.response);
+                }
+                if(xhr.status==200)
+                {
+                    options.success(responsetext);
+
+                }else{
+                    options.error(responsetext,xhr);
+                }
+            } 
+        }
+        ajax({
+            url:"http://cloud-music.pl-fe.cn/personalized?",
+            success:function(data){
+                data = data.result;
+                console.log(data);
+                for(let i =0;i<data.length;i++){
+                    let li = document.createElement('li');
+                    li.innerHTML = `<img src = "${data[i].picUrl}"><p>${data[i].name}</p>`;
+                    ul.append(li);
+                }
+            },
+            // 请求参数位置和值
+            data:{
+               limit:30,
+            },
+        })
+    </script>
+</body>
+</html>

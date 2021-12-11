@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery_min.js"></script>
+    <style>
+         *{
+            margin: 0px;
+            padding: 0px;
+        }
+
+        li{
+            display: inline-block;
+            list-style: none;
+            width: 150px;
+            height: 200px;
+            padding-left: 10px;
+        }
+
+        li img{
+            width: 150px;
+            height: 150px;
+        }
+
+        li p{
+            overflow: hidden;
+            font-size: 14px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <ul>
+        </ul>
+    </div>
+    <script>
+        function fetch(method,url,data)
+        {
+            return new Promise((resolve,reject)=>{
+                console.log(data);
+                var params="";
+                    for(var  a in data)
+                    {
+                        params+=a+"="+data[a]+"&";
+                    }
+                    console.log(params);
+                var xhr=new XMLHttpRequest();
+                if(method=="get"){
+                    params=params.substr(0,params.length-1);
+                    xhr.open(method,url+"?"+params);
+                    console.log(url+params);
+                }
+                else{
+                 xhr.open(method,url);
+
+                }
+                if(method=="post")
+                {
+                    xhr.send(data)
+                }else{
+                    xhr.send();
+                }
+                xhr.onload=function(){
+                    if(xhr.status<=200||xhr.status<300)
+                    {
+                        
+                        resolve(xhr.response);
+                    }else{
+                        reject(xhr.response);
+                    }
+                }
+            })
+        }
+        let ul = document.querySelector('ul');
+        let data={
+            limit:30
+            
+        };
+        fetch("get","http://cloud-music.pl-fe.cn/personalized",data).then(res=>{
+            console.log(JSON.parse(res).result);
+            data = JSON.parse(res).result;
+            for(let i =0;i<data.length;i++){
+                    let li = document.createElement('li');
+                    li.innerHTML = `<img src = "${data[i].picUrl}"><p>${data[i].name}</p>`;
+                    ul.append(li);
+                }   
+        })
+    </script>
+</body>
+</html>
