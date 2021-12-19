@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery_min.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul li{
+            list-style: none;
+            height: 40px;
+            color: skyblue;
+        }
+        ul li div{
+            display: inline-block;
+        }
+        ul li p{
+            display: inline-block;
+            /* float: right; */
+        }
+
+        .nav  {
+            position: absolute;
+            display: none;
+            width: 100%;
+            text-align: center;
+            background-color: white;
+            z-index: 100;
+        }
+
+        .nav li{
+            list-style: none;
+            height: 30px;
+            font-size: 16px;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="height: 30px; background-color: rgb(192, 230, 255); text-align: center; line-height: 30px; color: white;">历史上的今天
+        <button style="float: right; height: 30px; width: 20px;"></button>
+    </div>
+    <div >
+        <ul class="nav">
+            <li>电话号码查询</li>
+            <li>手机号查询</li>
+            <li>万年历查询</li>
+            <li>北京时间查询</li>
+            <li>IP地址查询</li>
+        </ul>
+    </div>
+    <script>
+        let body = document.querySelector('body');
+        $.ajax({
+            type: 'GET',
+            url: 'https://api.oick.cn/lishi/api.php',
+            dataType: 'json',
+            // xhrFields: { withCredentials: false },//跨域安全带
+            error: function (xhr, status) {  // 错误处理
+                console.log(xhr, status);
+            },
+            success: function (data, status) {  // 获取结果
+                let div = document.createElement('div');
+                let res = data.result;
+                div.style.backgroundColor='white';
+                div.style.height='40px';
+                div.style.fontSize="18px"
+                div.style.textAlign='center';
+                div.style.lineHeight='40px';
+                div.innerHTML = data.day;
+                div.style.color='black'
+                body.append(div);
+                var ul = document.createElement('ul');
+                ul.classList.add('dataul');
+                body.append(ul);
+                for(let i=0;i<data.result.length;i++){
+                    let li = document.createElement("li");
+                    let str = res[i].date.substr(0,4);
+                    li.innerHTML = `<div>${str}&nbsp&nbsp|</div>`+`<p>${res[i].title}</p>`;
+                    ul.append(li);
+                }
+
+            }
+        })
+        let btn =document.querySelector('button');
+        let nav = document.querySelector('.nav'); 
+        let flag = true;
+        let dataul = document.querySelector('.dataul');
+        console.log(dataul);
+        btn.addEventListener('touchend',function(){
+            if(flag){
+                nav.style.display='block';
+                flag=false;
+            }else{
+                nav.style.display='none';
+                flag=true;
+            }
+        })
+    </script>
+</body>
+    
+</html>
